@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  azure-cost-iq:
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      # ── Azure credentials (required for Live Analyzer tab) ──────────────────
+      - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+      - DEFAULT_SCOPE=${DEFAULT_SCOPE:-}
+      # ── Server ──────────────────────────────────────────────────────────────
+      - NODE_ENV=production
+      - PORT=8080
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# For local development with hot-reload, use: npm run dev
+# This compose file is for production / self-hosted deployments.
