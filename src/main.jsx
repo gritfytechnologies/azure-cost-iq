@@ -2,6 +2,7 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from '../App.jsx';
 import LiveAnalysis from '../LiveAnalysis.jsx';
+import { ErrorBoundary } from './ErrorBoundary.jsx';
 
 const TAB_STYLE = (active) => ({
   padding: '9px 22px',
@@ -53,7 +54,9 @@ function Root() {
 
       {/* Tab content */}
       <div style={{ padding: tab === 'live' ? '0' : '0.75rem 1rem', maxWidth: tab === 'live' ? '100%' : 800, margin: '0 auto' }}>
-        {tab === 'estimator' ? <App /> : <LiveAnalysis />}
+        {tab === 'estimator'
+          ? <ErrorBoundary label="Cost Estimator"><App /></ErrorBoundary>
+          : <ErrorBoundary label="Live Analyzer"><LiveAnalysis /></ErrorBoundary>}
       </div>
     </div>
   );
